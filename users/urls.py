@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('user/', views.UserProfileView.as_view(), name='user-profile'),
     path('user/login', views.LoginView.as_view(), name='send-otp'),
     path("auth/google/", views.GoogleLogin.as_view(), name="google_callback"),
     path('user/register', views.RegisterView.as_view(), name='send-otp'),

@@ -9,7 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your-default-secret-key')
 
 # DEBUG
-DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG =True
 
 # Installed applications
 INSTALLED_APPS = [
@@ -24,6 +25,7 @@ INSTALLED_APPS = [
     'users',
     'resorts',
     'packages',
+    'profileapp',
     'rest_framework',
     'rest_framework_simplejwt',
     'django.contrib.sites',
@@ -33,16 +35,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 ]
 
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'admin_user.jwtAuthentication.CustomJWTAuthentication',
-    )
-}
-
-# JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -83,19 +77,26 @@ MIDDLEWARE = [
 
 APPEND_SLASH = False
 
+CORS_ALLOW_CREDENTIALS = True
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+]
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
     "PUT",
+    "PATCH",
     "DELETE",
     "OPTIONS",
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 # Caching settings
 CACHES = {
@@ -171,3 +172,19 @@ AUTH_USER_MODEL = 'users.User'
 TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = config('TWILIO_PHONE_NUMBER')
+
+STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
+STRIPE_TEST_PUBLISHABLE_KEY = config('STRIPE_TEST_PUBLISHABLE_KEY')
+
+import cloudinary
+import logging
+logger = logging.getLogger(__name__)
+
+cloudinary.config(
+    cloud_name=config("cloud_name"),
+    api_key=config("api_key"),
+    api_secret=config("api_secret")
+)
+
+logger.debug(f"Cloudinary config: cloud_name={config('cloud_name')}, api_key={config('api_key')}")
+

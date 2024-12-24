@@ -10,4 +10,6 @@ urlpatterns = [
     path('api/', include('admin_user.urls')),
     path('api/', include('users.urls')),  
     path('api/', include('packages.urls')),  
+    path('api/', include('resorts.urls')), 
+    path('api/', include('profileapp.urls')),  
 ]

@@ -30,9 +30,10 @@ class LoginView(APIView):
                 refresh = RefreshToken.for_user(user)
                 access_token = refresh.access_token
                 
-                # Add custom claims
+                refresh["is_admin"] = False
+                refresh["user_id"] = user.id 
                 access_token["is_admin"] = False
-                access_token["user_id"] = user.id  # Include user ID
+                access_token["user_id"] = user.id 
 
                 return Response({
                    'refresh': str(refresh),
@@ -52,6 +53,7 @@ class GoogleLogin(APIView):
     def post(self, request):
         try:
             user_data = request.data.get("user")
+            print(user_data)
             if not user_data:
                 return Response({"error": "User data is required."}, status=400)
 
@@ -76,22 +78,23 @@ class GoogleLogin(APIView):
 
             # Generate JWT tokens for the user
             refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
+            access_token = refresh.access_token
 
             # Add custom claims to the access token
             access_token["is_admin"] = False
-            access_token["user_id"] = user.id  # Include user ID
+            access_token["user_id"] = user.id  
 
             return Response({
                 "message": "User authenticated successfully",
-                "token": access_token,
-                "refresh": str(refresh),
+                "token": str(access_token),
+                "refresh_token": str(refresh),
                 "user": user.username,
                 "profile": picture,
-                'is_admin': user.is_staff,
+                'is_admin': False,
             })
 
         except Exception as e:
+            print(e)
             return Response({"error": "An error occurred during authentication."}, status=500)
 
 
@@ -225,31 +228,18 @@ class RefreshTokenView(APIView):
         refresh_token = request.data.get('refresh_token')
         if not refresh_token:
             return Response({'detail': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             refresh = RefreshToken(refresh_token)
-            new_access_token = refresh.access_token
-            return Response({'access': str(new_access_token)}, status=status.HTTP_200_OK)
+            token = refresh.access_token
+            token['is_admin'] = refresh['is_admin'] if refresh['is_admin'] in refresh else False
+            token['user_id'] = refresh['user_id'] if refresh['user_id'] in refresh else None
+            return Response({'access': str(token)}, status=status.HTTP_200_OK)
         except Exception as e:
+            print('RefreshTokenView',e)
             return Response({'detail': 'Invalid refresh token'}, status=status.HTTP_401_UNAUTHORIZED)
         
 
 
-class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]  
-    authentication_classes = [JWTAuthentication]  
-
-    def get(self, request):
-        user = request.user
-        data = {
-            "username": user.username,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "phone_number": user.phone_number,
-            "email": user.email,
-            "user_image": user.user_image or None,  
-        }
-        return Response(data)
     
 class PasswordResetView(APIView):
     def post(self, request, *args, **kwargs):
