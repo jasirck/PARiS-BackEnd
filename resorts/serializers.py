@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Resort, ResortImages,ResortCategory
+from .models import Resort, ResortImages,ResortCategory,BookedResort
 
 class ResortImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +57,27 @@ class CategorySerializer(serializers.ModelSerializer):
                     'name': '! category with this name already exists.'
                 })
         return data
+    
+
+
+
+class BookedResortSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.last_name', read_only=True)
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    user_phone = serializers.CharField(source='user.phone_number', read_only=True)
+    resort_name = serializers.CharField(source='resort.name', read_only=True)
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BookedResort
+        fields = [
+            'id', 'user', 'resort', 'start_date', 'end_date', 'days','paid_amount',
+            'total_amount', 'conformed', 'adults', 'children',
+            'user_name', 'user_email', 'user_phone', 'resort_name', 'image',
+        ]
+
+    def get_image(self, obj):
+        if isinstance(obj, BookedResort):
+            if obj.resort.images.exists():
+                return obj.resort.images.first().image
+        return None

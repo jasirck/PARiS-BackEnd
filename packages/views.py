@@ -22,13 +22,14 @@ redis_conn = get_redis_connection('default')
 
 class PackageView(APIView):
     def get(self, request):
-        packages = Package.objects.prefetch_related('days_package').filter(is_holiday=False)
+        Package.update_validity()
+        packages = Package.objects.prefetch_related('days_package').filter(is_holiday=False,valid=True)
         serializer = UserPackageSerializer(packages, many=True)
         return Response(serializer.data)
     
 class HolidaysView(APIView):
     def get(self, request):
-        packages = Package.objects.prefetch_related('days_package').filter(is_holiday=True)
+        packages = Package.objects.prefetch_related('days_package').filter(is_holiday=True,valid=True)
         serializer = UserPackageSerializer(packages, many=True)
         return Response(serializer.data)
 
@@ -37,7 +38,7 @@ class AdminPackageView(APIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [CustomJWTAuthentication]
     def get(self, request, pk=None):
-        print(request.data)
+        Package.update_validity()   
         if pk:
             package = Package.objects.get(id=pk)
             days = Days.objects.filter(package=package.id)
@@ -187,7 +188,7 @@ class AdminBookedpackageView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedPackage.objects.filter(package__is_holiday=False)
+            bookings = BookedPackage.objects.filter(package__is_holiday=False,valid = True)
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

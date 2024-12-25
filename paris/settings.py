@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'resorts',
     'packages',
     'profileapp',
+    'payment',
     'rest_framework',
     'rest_framework_simplejwt',
     'django.contrib.sites',

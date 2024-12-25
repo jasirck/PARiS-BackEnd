@@ -80,6 +80,8 @@ class GoogleLogin(APIView):
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
 
+            refresh["is_admin"] = False
+            refresh["user_id"] = user.id 
             # Add custom claims to the access token
             access_token["is_admin"] = False
             access_token["user_id"] = user.id  

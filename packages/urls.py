@@ -26,7 +26,7 @@ urlpatterns = [
     path('booked-package/', views.BookedPackageView.as_view(), name='package-request'),
     path('admin-booked-package/', views.AdminBookedpackageView.as_view(), name='package'),
 
-    path('create-checkout-session/', views.CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
-    path("confirm-payment/",views.ConfirmPaymentView.as_view(), name="confirm-payment"),
+    
+    # path("confirm-payment/",views.ConfirmPaymentView.as_view(), name="confirm-payment"),
 
 ]

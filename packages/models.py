@@ -3,6 +3,7 @@ from resorts.models import Resort
 from users.models import User  
 from django.utils import timezone
 from datetime import timedelta
+from datetime import date
 
 class Package(models.Model):
     name = models.CharField(max_length=255,unique=True)
@@ -13,7 +14,7 @@ class Package(models.Model):
     package_included = models.TextField(null=True, blank=True)
     package_excluded = models.TextField(null=True, blank=True)
     note = models.TextField(null=True, blank=True)
-    valid = models.BooleanField()
+    valid = models.BooleanField(default=True)
     base_price = models.BigIntegerField()
     adult_price = models.BigIntegerField(null=True, blank=True)
     child_price = models.BigIntegerField(null=True, blank=True)
@@ -21,6 +22,11 @@ class Package(models.Model):
 
     def __str__(self):
         return self.name
+    @staticmethod
+    def update_validity():
+        expired_packages = Package.objects.filter(end__lt=date.today(), valid=True)
+        expired_packages.update(valid=False)
+        
 
 
 class Days(models.Model):
