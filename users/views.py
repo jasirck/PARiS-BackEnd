@@ -167,7 +167,7 @@ class SendOtpForgotView(APIView):
             return Response({'error': 'Invalid phone number'}, status=status.HTTP_400_BAD_REQUEST)
 
         if User.objects.filter(phone_number=str(phone_number)).exists():
-            # otp = send_otp(phone_number)
+            otp = send_otp(phone_number)
             otp = random.randint(100000, 999999)
             otp_send_time = datetime.now()
             print(otp)  

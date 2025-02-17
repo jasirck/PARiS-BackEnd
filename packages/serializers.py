@@ -59,7 +59,7 @@ class BookedPackageSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'package', 'user_name', 'user_email', 'user_phone', 
             'package_name', 'adult_count', 'child_count', 'paid_amount', 
-            'total_amount', 'date', 'conformed', 'image',
+            'total_amount', 'date', 'conformed', 'image'
         ]
 
     def get_image(self, obj):

@@ -18,7 +18,7 @@ class ResortSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'location', 'pool', 'package_inclusions',
             'base_price', 'adult_price', 'child_price', 'policy',
-            'valid', 'category', 'images',
+            'valid', 'category', 'images','full_refund','half_refund',
         ]
 
 
@@ -28,7 +28,7 @@ class UserResortSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Resort
-        fields = ['id', 'name', 'pool', 'base_price', 'adult_price', 'child_price', 'images','category_id']
+        fields = ['id', 'name', 'pool', 'base_price', 'adult_price', 'child_price', 'images','category_id','full_refund','half_refund',]
 
     def to_representation(self, instance):
         # Limit images to only one in the response

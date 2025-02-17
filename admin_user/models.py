@@ -1,6 +1,4 @@
-from django.db import models
-
-# Create your models here.
+# admin_user/models.py
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
@@ -48,4 +46,4 @@ class Admin(AbstractBaseUser):
 
     def __str__(self):
         return self.username
- 
+

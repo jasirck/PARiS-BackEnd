@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Package, Days, BookedPackage,PackageCategory
-from users.models import Payment,User
+from users.models import User
 from .serializers import PackageSerializer, DaysSerializer ,BookedPackageSerializer,UserPackageSerializer,CategorySerializer
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from admin_user.jwtAuthentication import CustomJWTAuthentication , CustomAdminJWTAuthentication
@@ -10,6 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 from json import loads
 import stripe
+from payments.models import Payment 
 from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.exceptions import NotFound
@@ -22,7 +23,6 @@ redis_conn = get_redis_connection('default')
 
 class PackageView(APIView):
     def get(self, request):
-        Package.update_validity()
         packages = Package.objects.prefetch_related('days_package').filter(is_holiday=False,valid=True)
         serializer = UserPackageSerializer(packages, many=True)
         return Response(serializer.data)
@@ -38,7 +38,7 @@ class AdminPackageView(APIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [CustomJWTAuthentication]
     def get(self, request, pk=None):
-        Package.update_validity()   
+        # Package.update_validity()   
         if pk:
             package = Package.objects.get(id=pk)
             days = Days.objects.filter(package=package.id)
@@ -149,7 +149,7 @@ class BookedPackageView(APIView):
         data = request.data
         package = get_object_or_404(Package, id=data.get('package'))
         total_amount = (package.adult_price * data.get('adult_count', 0)) + \
-                       (package.child_price * data.get('child_count', 0))
+                       (package.child_price * data.get('child_count', 0))+ package.base_price
         data['total_amount'] = total_amount
         data['paid_amount'] = 0  
         data['user'] = user.id
@@ -169,11 +169,12 @@ class BookedPackageView(APIView):
             serializer = BookedPackageSerializer(booking)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            # List all bookings
-            bookings = BookedPackage.objects.filter(user=request.user,package__is_holiday=False)
+            # List all bookings with the updated filter
+            bookings = BookedPackage.objects.filter(package__is_holiday=False, package__valid=True)
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class AdminBookedpackageView(APIView):
@@ -188,7 +189,7 @@ class AdminBookedpackageView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedPackage.objects.filter(package__is_holiday=False,valid = True)
+            bookings = BookedPackage.objects.filter(package__is_holiday=False,package__valid = True)
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -331,7 +332,7 @@ class BookedHolidayView(APIView):
         data = request.data
         package = get_object_or_404(Package, id=data.get('package'))
         total_amount = (package.adult_price * data.get('adult_count', 0)) + \
-                       (package.child_price * data.get('child_count', 0))
+                       (package.child_price * data.get('child_count', 0))+package.base_price
         data['total_amount'] = total_amount
         data['paid_amount'] = 0  
         data['user'] = user.id
@@ -491,7 +492,7 @@ class CreateCheckoutSessionView(APIView):
                 cancel_url="http://localhost:5173/cancel",
             )
 
-            # Cache session ID and metadata in Redis
+            print("checkout_session:",checkout_session)
             redis_key = f"checkout_session_{checkout_session.id}"
             redis_data = {
                 'session_id': checkout_session.id or "",
@@ -533,13 +534,9 @@ class ConfirmPaymentView(APIView):
                 redis_key = f"checkout_session_{session_id}"
 
                 data = redis_conn.hgetall(redis_key)
-                print('Redis connected')
                 booked_id = int(data.get(b"booked_id"))
-                print(f'booked_id: {booked_id},type: {type(booked_id)}')
                 amount = int(data.get(b"amount"))
-                print(f'amount: {amount},type: {type(amount)}')
                 name = data.get(b"name",b'').decode('utf-8') 
-                print(f'name: {name},type: {type(name)}')
                 booked_id = int(booked_id)
                 booked_package = BookedPackage.objects.get(id=booked_id)
                 booked_package.paid_amount = amount

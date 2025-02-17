@@ -14,6 +14,7 @@ DEBUG =True
 
 # Installed applications
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -21,12 +22,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'channels',
     'admin_user',
     'users',
     'resorts',
     'packages',
     'profileapp',
-    'payment',
+    'payments',
+    'messege',
+    'visas',
+    'flights',
+    'django_celery_beat',
     'rest_framework',
     'rest_framework_simplejwt',
     'django.contrib.sites',
@@ -37,8 +43,8 @@ INSTALLED_APPS = [
 ]
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
@@ -83,10 +89,12 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "http://127.0.0.1:8000",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
+    "http://127.0.0.1:8000",    
 ]
 
 CORS_ALLOW_METHODS = [
@@ -143,8 +151,14 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+        'TEST': {
+            'NAME': 'test_paris_db',  
+            
+        },
     }
 }
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -189,3 +203,23 @@ cloudinary.config(
 
 logger.debug(f"Cloudinary config: cloud_name={config('cloud_name')}, api_key={config('api_key')}")
 
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0' 
+CELERY_ACCEPT_CONTENT = ['json']              
+CELERY_TASK_SERIALIZER = 'json'          
+
+
+
+# ASGI application (for Channels)
+ASGI_APPLICATION = 'paris.asgi.application' 
+
+# Channel layers configuration (using Redis as the backend)
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

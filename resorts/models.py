@@ -12,6 +12,8 @@ class Resort(models.Model):
     policy = models.TextField(null=True, blank=True)
     valid = models.BooleanField( default=True)
     category = models.ForeignKey("ResortCategory", on_delete=models.CASCADE,related_name="Resort_category")
+    full_refund = models.IntegerField(default=14)  
+    half_refund = models.IntegerField(default=7)  
 
 
 
@@ -38,6 +40,7 @@ class BookedResort(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     conformed = models.CharField( max_length=50,default='Requested')
+    approved_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"Booking by {self.user.username} at {self.resort.name}"
