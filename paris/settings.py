@@ -83,6 +83,8 @@ MIDDLEWARE = [
 
 APPEND_SLASH = False
 
+ALLOWED_HOSTS = ['your-domain.com', '3.83.191.1']
+
 CORS_ALLOW_CREDENTIALS = True
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
