@@ -1,28 +1,9 @@
-# from amadeus import Client, ResponseError
-
-# amadeus = Client(client_id='TzDkIoSBg3I1uRr2fHBwDcwPcEYMcfzv',client_secret='XgIADv3Q1KkZlNLp')
-
-# def get_flights(from_city, to_city, travel_date):
-#     try:
-#         response = amadeus.shopping.flight_offers_search.get(
-#             originLocationCode=from_city,
-#             destinationLocationCode=to_city,
-#             departureDate=travel_date,
-#             adults=1
-#         )
-#         # Process and return the flight data
-#         flights = response.data 
-#         flights = response.data[:15]
-#         return flights
-#     except ResponseError as e:
-#         raise Exception(f"Error fetching flights: {e}")
-
-
-
 import requests
+from decouple import config
 
 def get_flights(from_city, to_city, travel_date):
-    access_key = "513dd9ebdb2690c720f4b644eae3fbe4"  
+    access_key = config('flight_access_key')
+    
     try:
         print(f"Requesting flights from {from_city} to {to_city} on {travel_date}")
         

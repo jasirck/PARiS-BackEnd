@@ -17,8 +17,6 @@ class FlightSearchView(APIView):
 
         try:
             flights = get_flights(from_city, to_city, travel_date)
-            
-            # print(json.dumps(flights[0], indent=4))
 
             return Response({'flights': flights}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -34,15 +32,12 @@ class BookFlightView(APIView):
         try:
             # Extract flight data and create Flight instance
             flight_data = request.data.get('flightData', {})
-            print("Incoming flight data:", flight_data)  # Debug print
             
             flight_serializer = FlightSerializer(data=flight_data)
             if not flight_serializer.is_valid():
-                print("Flight serializer errors:", flight_serializer.errors)  # Debug print
                 return Response(flight_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
             flight = flight_serializer.save()
-            print("Created flight with ID:", flight.id)  # Debug print
 
             # Prepare booking data
             booking_data = request.data.get('data', {})
@@ -68,16 +63,13 @@ class BookFlightView(APIView):
                 'user': request.user.id
             }
 
-            print("Transformed booking data:", transformed_booking_data)  # Debug print
             
             booked_flight_serializer = BookedFlightSerializer(data=transformed_booking_data)
             if not booked_flight_serializer.is_valid():
-                print("BookedFlight serializer errors:", booked_flight_serializer.errors)  # Debug print
                 flight.delete()
                 return Response(booked_flight_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
             booked_flight = booked_flight_serializer.save()
-            print("Successfully created booking with ID:", booked_flight.id)  # Debug print
             
             return Response({
                 'message': 'Flight booked successfully',
@@ -86,7 +78,6 @@ class BookFlightView(APIView):
             }, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            print("Exception occurred:", str(e))  # Debug print
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, *args, **kwargs):
         # Get all booked flights for the authenticated user

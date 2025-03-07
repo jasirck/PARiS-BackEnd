@@ -9,8 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your-default-secret-key')
 
 # DEBUG
-# DEBUG = config('DEBUG', default=False, cast=bool)
-DEBUG =True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Installed applications
 INSTALLED_APPS = [
