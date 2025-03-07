@@ -8,42 +8,64 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('admin_user', '0001_initial'),
-        ('messege', '0001_initial'),
+        ("admin_user", "0001_initial"),
+        ("messege", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='chatmessage',
-            name='receiver',
+            model_name="chatmessage",
+            name="receiver",
         ),
         migrations.RemoveField(
-            model_name='chatmessage',
-            name='sender',
+            model_name="chatmessage",
+            name="sender",
         ),
         migrations.RemoveField(
-            model_name='chatsession',
-            name='admin',
+            model_name="chatsession",
+            name="admin",
         ),
         migrations.AddField(
-            model_name='chatmessage',
-            name='receiver_user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='received_messages', to=settings.AUTH_USER_MODEL),
+            model_name="chatmessage",
+            name="receiver_user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="received_messages",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='chatmessage',
-            name='sender_admin',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='sent_messages', to='admin_user.admin'),
+            model_name="chatmessage",
+            name="sender_admin",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="sent_messages",
+                to="admin_user.admin",
+            ),
         ),
         migrations.AddField(
-            model_name='chatmessage',
-            name='sender_user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='sent_messages', to=settings.AUTH_USER_MODEL),
+            model_name="chatmessage",
+            name="sender_user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="sent_messages",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='chatsession',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='chat_sessions', to=settings.AUTH_USER_MODEL),
+            model_name="chatsession",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="chat_sessions",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

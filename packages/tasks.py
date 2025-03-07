@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from packages.models import BookedPackage, Package
 from datetime import date
 
+
 @shared_task
 def update_booked_package_status():
     """
@@ -15,10 +16,9 @@ def update_booked_package_status():
     """
     two_days_ago = now() - timedelta(days=2)
     bookings = BookedPackage.objects.filter(
-        conformed='approved', 
-        approved_at__lte=two_days_ago
+        conformed="approved", approved_at__lte=two_days_ago
     )
-    bookings.update(conformed='declined')
+    bookings.update(conformed="declined")
 
 
 @shared_task
@@ -28,4 +28,3 @@ def update_package_validity():
     """
     expired_packages = Package.objects.filter(end__lt=date.today(), valid=True)
     expired_packages.update(valid=False)
-

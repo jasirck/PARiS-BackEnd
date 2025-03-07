@@ -7,14 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('messege', '0002_remove_chatmessage_receiver_and_more'),
+        ("messege", "0002_remove_chatmessage_receiver_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatmessage',
-            name='session',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='messege.chatsession'),
+            model_name="chatmessage",
+            name="session",
+            field=models.ForeignKey(
+                default=2,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="messages",
+                to="messege.chatsession",
+            ),
             preserve_default=False,
         ),
     ]

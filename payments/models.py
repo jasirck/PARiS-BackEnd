@@ -2,10 +2,12 @@
 from django.db import models
 from users.models import User
 from packages.models import BookedPackage
+
 # Create your models here.
 
+
 class Payment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
     method = models.CharField(max_length=50)
     status = models.CharField(max_length=50)
     transaction_id = models.CharField(max_length=100)
@@ -17,4 +19,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Booking ID {self.booking.id} - {self.status}"
-

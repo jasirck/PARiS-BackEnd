@@ -7,14 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('packages', '0014_package_full_refund_package_half_refund'),
-        ('payments', '0001_initial'),
+        ("packages", "0014_package_full_refund_package_half_refund"),
+        ("payments", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='payment',
-            name='booking',
-            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='packages.bookedpackage'),
+            model_name="payment",
+            name="booking",
+            field=models.ForeignKey(
+                blank=True,
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="packages.bookedpackage",
+            ),
         ),
     ]
