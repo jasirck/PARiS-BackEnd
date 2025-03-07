@@ -23,10 +23,11 @@ class UserProfileView(APIView):
 
     def put(self, request):
         user = request.user
-        user.username = request.data.get('username', user.username)
-        user.first_name = request.data.get('first_name', user.first_name)
-        user.last_name = request.data.get('last_name', user.last_name)
-        user.phone_number = request.data.get('phone_number', getattr(user, 'phone_number', ''))
-        user.email = request.data.get('email', user.email)
+        user.username = request.data.get('username')
+        user.first_name = request.data.get('first_name')
+        user.last_name = request.data.get('last_name')
+        user.phone_number = request.data.get('phone_number')
+        user.email = request.data.get('email')
+        user.user_image = request.data.get('profile_image')
         user.save()
         return Response({"message": "Profile updated successfully"}, status=status.HTTP_200_OK)

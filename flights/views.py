@@ -90,6 +90,6 @@ class BookFlightView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request, *args, **kwargs):
         # Get all booked flights for the authenticated user
-        booked_flights = BookedFlight.objects.filter(user=request.user)
+        booked_flights = BookedFlight.objects.filter(user=request.user).order_by('-created_at')
         serializer = BookedFlightGetSerializer(booked_flights, many=True)
         return Response(serializer.data)

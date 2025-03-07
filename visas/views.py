@@ -71,7 +71,7 @@ class VisaListCreateView(APIView):
     # permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        visas = Visa.objects.all()
+        visas = Visa.objects.all().order_by('name')
         serializer = GetVisaSerializer(visas, many=True)
         return Response(serializer.data)
 
@@ -212,7 +212,7 @@ class BookedVisaView(APIView):
     authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
-        visas = VisaBooked.objects.filter(user=request.user.id)
+        visas = VisaBooked.objects.filter(user=request.user.id).order_by('-created_at')
         serializer = VisaBookedSerializer(visas, many=True)
         return Response(serializer.data)
 
@@ -240,7 +240,7 @@ class AdminBookedVisaAPIView(APIView):
 
     def get(self, request):
         # Fetch all VisaBooked entries
-        visa_bookings = VisaBooked.objects.all()
+        visa_bookings = VisaBooked.objects.all().order_by('-created_at')
         serializer = VisaBookedSerializer(visa_bookings, many=True)
         return Response(serializer.data)
 

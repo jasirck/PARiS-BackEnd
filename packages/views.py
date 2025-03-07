@@ -51,7 +51,7 @@ class AdminPackageView(APIView):
             return Response(result, status=200)
         else:
             # List all packages
-            packages = Package.objects.filter(is_holiday=False)
+            packages = Package.objects.filter(is_holiday=False).order_by('name')
             serializer = PackageSerializer(packages, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -94,9 +94,25 @@ class AdminPackageView(APIView):
     def put(self, request, pk):
         """Handles PUT requests."""
         package = get_object_or_404(Package, pk=pk)
+        print(request.data)
+        package_data = request.data
+        day_plans = loads(package_data.get('days_package', "[]"))
         serializer = PackageSerializer(package, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            for day_data in day_plans:
+                # Assign the saved package's ID to each day plan
+                day_data["package"] = package.id
+    
+                # Serialize and save each day plan
+                day_serializer = DaysSerializer(data=day_data)
+                if day_serializer.is_valid():
+                    day_serializer.save()
+                else:
+                    # Print errors inside the loop
+                    print(day_serializer.errors)
+                    return Response(day_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -170,7 +186,7 @@ class BookedPackageView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings with the updated filter
-            bookings = BookedPackage.objects.filter(package__is_holiday=False, package__valid=True)
+            bookings = BookedPackage.objects.filter(package__is_holiday=False, package__valid=True).order_by('-date')
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -189,7 +205,7 @@ class AdminBookedpackageView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedPackage.objects.filter(package__is_holiday=False,package__valid = True)
+            bookings = BookedPackage.objects.filter(package__is_holiday=False,package__valid = True).order_by('-date')
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -233,7 +249,7 @@ class AdminHolidayView(APIView):
             return Response(result, status=200)
         else:
             # List all packages
-            holidays = Package.objects.filter(is_holiday=True)
+            holidays = Package.objects.filter(is_holiday=True).order_by('name')
             serializer = PackageSerializer(holidays, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -241,6 +257,7 @@ class AdminHolidayView(APIView):
     def post(self, request):
         """Handles POST requests."""
         holiday_data = request.data
+        print(holiday_data  )
     
         # Parse the days_holiday JSON string into a Python list
         day_plans = loads(holiday_data.get('days_holiday', "[]"))
@@ -277,9 +294,25 @@ class AdminHolidayView(APIView):
     def put(self, request, pk):
         """Handles PUT requests."""
         package = get_object_or_404(Package, pk=pk)
+        print(request.data)
+        holiday_data = request.data
+        day_plans = loads(holiday_data.get('days_holiday', "[]"))
         serializer = PackageSerializer(package, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            for day_data in day_plans:
+                # Assign the saved package's ID to each day plan
+                day_data["package"] = package.id
+    
+                # Serialize and save each day plan
+                day_serializer = DaysSerializer(data=day_data)
+                if day_serializer.is_valid():
+                    day_serializer.save()
+                else:
+                    # Print errors inside the loop
+                    print(day_serializer.errors)
+                    return Response(day_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -353,7 +386,7 @@ class BookedHolidayView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedPackage.objects.filter(user=request.user,package__is_holiday=True)
+            bookings = BookedPackage.objects.filter(user=request.user,package__is_holiday=True).order_by('-date')
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -371,7 +404,7 @@ class AdminBookedHolidayView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedPackage.objects.filter(package__is_holiday=True)
+            bookings = BookedPackage.objects.filter(package__is_holiday=True).order_by('-date')
             print(bookings)
             serializer = BookedPackageSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)

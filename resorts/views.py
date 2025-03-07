@@ -45,7 +45,7 @@ class AdminResortView(APIView):
                 return Response(
                     {"error": "Resort not found"}, status=status.HTTP_404_NOT_FOUND
                 )
-        resorts = Resort.objects.all()
+        resorts = Resort.objects.all().order_by('name')
         serializer = ResortSerializer(resorts, many=True)
         return Response(serializer.data)
 
@@ -115,8 +115,7 @@ class BookedResortView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # List all bookings
-            bookings = BookedResort.objects.filter(user=request.user)
-            print(bookings)
+            bookings = BookedResort.objects.filter(user=request.user).order_by('-created_at')
             serializer = BookedResortSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -135,6 +134,7 @@ class AdminBookedResortView(APIView):
             # List all bookings
             bookings = BookedResort.objects.all()
             print(bookings)
+            bookings = BookedResort.objects.all().order_by('-start_date')  # Order before serialization
             serializer = BookedResortSerializer(bookings, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request):

@@ -11,8 +11,10 @@ class ChatMessage(models.Model):
     sender_admin = models.ForeignKey(Admin, null=True, blank=True, on_delete=models.CASCADE, related_name="sent_messages")  
     receiver_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="received_messages")  
     message = models.TextField()
+    session = models.ForeignKey("ChatSession", on_delete=models.CASCADE, related_name="messages")   
     timestamp = models.DateTimeField(default=now)
     is_read = models.BooleanField(default=False)
+
 
     def __str__(self):
         if self.sender_user:

@@ -53,7 +53,7 @@ class UserListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        users = User.objects.all()  # Fetch all users
+        users = User.objects.all().order_by('username')
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
