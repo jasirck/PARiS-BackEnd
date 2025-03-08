@@ -164,7 +164,7 @@ class SendOtpView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # otp = send_otp(phone_number)
+        otp = send_otp(phone_number)
         otp = random.randint(100000, 999999)
         otp_send_time = datetime.now()
         print(otp)
