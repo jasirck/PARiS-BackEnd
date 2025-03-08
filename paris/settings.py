@@ -85,15 +85,18 @@ MIDDLEWARE = [
 APPEND_SLASH = False
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS=["https://paris-backend-production.up.railway.app"]
 
 CORS_ALLOW_CREDENTIALS = True
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
+    "https://paris-backend-production.up.railway.app",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://127.0.0.1:8000",
 ]
 CSRF_TRUSTED_ORIGINS = [
+    "https://paris-backend-production.up.railway.app",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://127.0.0.1:8000",

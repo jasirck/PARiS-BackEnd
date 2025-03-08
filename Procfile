@@ -1,1 +1,1 @@
-web: gunicorn paris.wsgi --log-file -
+web: gunicorn paris.wsgi 
