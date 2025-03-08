@@ -3,6 +3,7 @@
 /flights/migrations/
 /messegeAndPayments/migrations/
 /packages/migrations/
+/payments/migrations/
 /resorts/migrations/
 /users/migrations/
 /visas/migrations/
