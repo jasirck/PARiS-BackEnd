@@ -1,8 +1,9 @@
 /media/
 /admin_user/migrations/
 /flights/migrations/
-/messegeAndPayments/migrations/
+/messege/migrations/
 /packages/migrations/
+/payments/migrations/
 /resorts/migrations/
 /users/migrations/
 /visas/migrations/

@@ -83,7 +83,7 @@ MIDDLEWARE = [
 
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = ['*', '3.83.191.1', ]
+ALLOWED_HOSTS = ['54.234.139.197']
 
 CORS_ALLOW_CREDENTIALS = True
 # CORS settings
@@ -146,7 +146,7 @@ TEMPLATES = [
 # Database configuration
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": config("DB_NAME"),
         "USER": config("DB_USER"),
         "PASSWORD": config("DB_PASSWORD"),
@@ -176,8 +176,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = 'static/'
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
