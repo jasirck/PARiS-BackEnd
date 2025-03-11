@@ -5,7 +5,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    phone_number = models.BigIntegerField(unique=True, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, unique=True,null=True, blank=True)
     email = models.EmailField(unique=True)
     user_image = models.TextField(null=True, blank=True)
     first_join = models.DateField(auto_now_add=True)

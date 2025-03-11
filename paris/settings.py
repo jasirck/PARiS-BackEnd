@@ -90,11 +90,13 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
+    "https://accounts.google.com",
     
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
+    "https://accounts.google.com",
     
 ]
 
@@ -192,6 +194,7 @@ AUTH_USER_MODEL = "users.User"
 TWILIO_ACCOUNT_SID = config("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = config("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE_NUMBER = config("TWILIO_PHONE_NUMBER")
+TWILIO_WHATSAPP_NUMBER = config("TWILIO_WHATSAPP_NUMBER")
 
 STRIPE_TEST_SECRET_KEY = config("STRIPE_TEST_SECRET_KEY")
 STRIPE_TEST_PUBLISHABLE_KEY = config("STRIPE_TEST_PUBLISHABLE_KEY")
