@@ -1,8 +1,9 @@
 /media/
 /admin_user/migrations/
 /flights/migrations/
-/messegeAndPayments/migrations/
 /packages/migrations/
+/payments/migrations/
+/messege/migrations/
 /resorts/migrations/
 /users/migrations/
 /visas/migrations/
@@ -10,3 +11,8 @@
 .env
 __pycache__/
 *.pyc
+
+
+
+
+payments
