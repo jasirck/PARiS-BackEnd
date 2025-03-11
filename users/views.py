@@ -145,7 +145,7 @@ redis_conn = get_redis_connection("default")
 class SendOtpView(APIView):
     def post(self, request):
         phone_number = request.data.get("phone_number")
-
+        
         if not phone_number:
             return Response(
                 {"error": "Phone number is required"},
@@ -156,7 +156,6 @@ class SendOtpView(APIView):
             return Response(
                 {"error": "Invalid phone number"}, status=status.HTTP_400_BAD_REQUEST
             )
-
         # Check if the phone number already exists in the database
         if User.objects.filter(phone_number=phone_number).exists():
             return Response(
@@ -197,8 +196,8 @@ class SendOtpForgotView(APIView):
             return Response(
                 {"error": "Invalid phone number"}, status=status.HTTP_400_BAD_REQUEST
             )
-
-        if User.objects.filter(phone_number=str(phone_number)).exists():
+        
+        if User.objects.filter(phone_number=phone_number).exists():
             otp = send_otp(phone_number)
             otp = random.randint(100000, 999999)
             otp_send_time = datetime.now()
@@ -213,7 +212,7 @@ class SendOtpForgotView(APIView):
 
             # Use hset instead of deprecated hmset
             redis_conn.hset(redis_key, mapping=otp_data)
-            redis_conn.expire(redis_key, 300)  # Set expiration to 5 minutes
+            redis_conn.expire(redis_key, 300)  
 
             return Response(
                 {"message": "OTP sent successfully"}, status=status.HTTP_200_OK
