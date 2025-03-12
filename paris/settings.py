@@ -100,6 +100,9 @@ CSRF_TRUSTED_ORIGINS = [
     
 ]
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None  # Disables COOP
+
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
