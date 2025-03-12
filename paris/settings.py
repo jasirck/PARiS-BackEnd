@@ -86,6 +86,10 @@ APPEND_SLASH = False
 ALLOWED_HOSTS = ["54.234.139.197", "127.0.0.1","https://www.paristoursandtravels.in","https://paristoursandtravels.in"]
 
 CORS_ALLOW_CREDENTIALS = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "https://www.paristoursandtravels.in",
