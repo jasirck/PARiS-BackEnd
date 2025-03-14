@@ -101,13 +101,13 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
     "https://accounts.google.com",
-    "api.paristoursandtravels.in",
+    "https://api.paristoursandtravels.in",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
     "https://accounts.google.com",
-    "api.paristoursandtravels.in" ,
+    "https://api.paristoursandtravels.in" ,
     
 ]
 
