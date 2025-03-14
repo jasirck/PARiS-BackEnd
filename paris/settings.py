@@ -83,7 +83,13 @@ MIDDLEWARE = [
 
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = ["54.234.139.197", "127.0.0.1","https://www.paristoursandtravels.in","https://paristoursandtravels.in"]
+ALLOWED_HOSTS = [
+    "54.234.139.197", 
+    "127.0.0.1", 
+    "paristoursandtravels.in",
+    "www.paristoursandtravels.in",
+    "api.paristoursandtravels.in"  
+]
 
 CORS_ALLOW_CREDENTIALS = True
 SECURE_SSL_REDIRECT = True
@@ -95,12 +101,13 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
     "https://accounts.google.com",
-    
+    "api.paristoursandtravels.in",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://www.paristoursandtravels.in",
     "https://paristoursandtravels.in",
     "https://accounts.google.com",
+    "api.paristoursandtravels.in" ,
     
 ]
 
