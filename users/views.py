@@ -32,6 +32,8 @@ class LoginView(APIView):
             if user is not None:
                 refresh = RefreshToken.for_user(user)
                 access_token = refresh.access_token
+                user.last_login = datetime.now()
+                user.save()
 
                 refresh["is_admin"] = False
                 refresh["user_id"] = user.id
@@ -63,7 +65,6 @@ class GoogleLogin(APIView):
     def post(self, request):
         try:
             user_data = request.data.get("user")
-            print(user_data)
             if not user_data:
                 return Response({"error": "User data is required."}, status=400)
 
@@ -87,6 +88,9 @@ class GoogleLogin(APIView):
                     "user_image": picture,
                 },
             )
+            if created:
+                user.last_login = datetime.now()
+                user.save()
 
             # Generate JWT tokens for the user
             refresh = RefreshToken.for_user(user)
