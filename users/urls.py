@@ -14,4 +14,5 @@ urlpatterns = [
     path(
         "user/reset-password/", views.PasswordResetView.as_view(), name="reset-password"
     ),
+    path("api/facebook-data-deletion/", views.FacebookDataDeletionView.as_view(), name="facebook-data-deletion"),
 ]
