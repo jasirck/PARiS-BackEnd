@@ -18,6 +18,14 @@ from dateutil.parser import isoparse
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
+from django.conf import settings
+import hashlib
+import hmac
+import base64
+import json
+from django.http import JsonResponse
+from rest_framework.permissions import AllowAny
+from django.utils.encoding import force_bytes
 
 
 class LoginView(APIView):
@@ -321,3 +329,48 @@ class PasswordResetView(APIView):
                 )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class FacebookDataDeletionView(APIView):
+    permission_classes = [AllowAny]  
+
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            signed_request = data.get("signed_request")
+
+            if not signed_request:
+                return JsonResponse({"error": "Missing signed_request"}, status=400)
+
+            encoded_sig, payload = signed_request.split(".", 1)
+            decoded_sig = base64.urlsafe_b64decode(encoded_sig + "===")
+            expected_sig = hmac.new(
+                force_bytes(settings.FACEBOOK_APP_SECRET), 
+                force_bytes(payload), 
+                hashlib.sha256
+            ).digest()
+
+            if not hmac.compare_digest(decoded_sig, expected_sig):
+                return JsonResponse({"error": "Invalid signature"}, status=400)
+
+            # Extract user_id from payload
+            user_data = json.loads(base64.urlsafe_b64decode(payload + "==="))
+            user_id = user_data.get("user_id")
+
+            if not user_id:
+                return JsonResponse({"error": "Invalid user ID"}, status=400)
+
+            # Delete user data (modify based on your database)
+            user = User.objects.get(id=user_id)
+            user.is_active = False
+            user.save()
+
+            return JsonResponse(
+                {
+                    "url": "https://api.paristoursandtravels.in/user-data-deletion/",
+                    "confirmation_code": user_id,
+                }
+            )
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
