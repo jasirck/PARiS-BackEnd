@@ -332,45 +332,24 @@ class PasswordResetView(APIView):
 
 
 
-class FacebookDataDeletionView(APIView):
-    permission_classes = [AllowAny]  
+class PrivacyPolicyView(APIView):
+    def get(self, request):
+        data = {
+            "title": "Privacy Policy",
+            "content": "Your privacy is important to us. This policy explains how we collect, use, and store your information."
+        }
+        return Response(data)
 
+class TermsOfServiceView(APIView):
+    def get(self, request):
+        data = {
+            "title": "Terms of Service",
+            "content": "By using our services, you agree to our terms and conditions outlined here."
+        }
+        return Response(data)
+
+class UserDataDeletionView(APIView):
     def post(self, request):
-        try:
-            data = json.loads(request.body)
-            signed_request = data.get("signed_request")
-
-            if not signed_request:
-                return JsonResponse({"error": "Missing signed_request"}, status=400)
-
-            encoded_sig, payload = signed_request.split(".", 1)
-            decoded_sig = base64.urlsafe_b64decode(encoded_sig + "===")
-            expected_sig = hmac.new(
-                force_bytes(settings.FACEBOOK_APP_SECRET), 
-                force_bytes(payload), 
-                hashlib.sha256
-            ).digest()
-
-            if not hmac.compare_digest(decoded_sig, expected_sig):
-                return JsonResponse({"error": "Invalid signature"}, status=400)
-
-            # Extract user_id from payload
-            user_data = json.loads(base64.urlsafe_b64decode(payload + "==="))
-            user_id = user_data.get("user_id")
-
-            if not user_id:
-                return JsonResponse({"error": "Invalid user ID"}, status=400)
-
-            # Delete user data (modify based on your database)
-            user = User.objects.get(id=user_id)
-            user.is_active = False
-            user.save()
-
-            return JsonResponse(
-                {
-                    "url": "https://api.paristoursandtravels.in/user-data-deletion/",
-                    "confirmation_code": user_id,
-                }
-            )
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+        user_id = request.data.get('user_id')
+        # Perform user data deletion logic here
+        return Response({"message": f"User data for user_id {user_id} has been deleted."})

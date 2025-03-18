@@ -14,5 +14,7 @@ urlpatterns = [
     path(
         "user/reset-password/", views.PasswordResetView.as_view(), name="reset-password"
     ),
-    path("facebook-data-deletion/", views.FacebookDataDeletionView.as_view(), name="facebook-data-deletion"),
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy-policy'),
+    path('terms-of-service/', views.TermsOfServiceView.as_view(), name='terms-of-service'),
+    path('user-data-deletion/', views.UserDataDeletionView.as_view(), name='user-data-deletion'),
 ]
