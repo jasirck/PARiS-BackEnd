@@ -177,7 +177,7 @@ class SendOtpView(APIView):
             )
 
         otp = send_otp(phone_number)
-        otp = random.randint(100000, 999999)
+        # otp = random.randint(100000, 999999)
         otp_send_time = datetime.now()
         print(otp)
 
@@ -212,7 +212,7 @@ class SendOtpForgotView(APIView):
         
         if User.objects.filter(phone_number=phone_number).exists():
             otp = send_otp(phone_number)
-            otp = random.randint(100000, 999999)
+            # otp = random.randint(100000, 999999)
             otp_send_time = datetime.now()
             print(otp)
 
