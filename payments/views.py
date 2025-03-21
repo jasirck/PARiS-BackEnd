@@ -68,8 +68,8 @@ class CreateCheckoutSessionView(APIView):
                     }
                 ],
                 mode="payment",
-                success_url="http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url="http://localhost:5173/cancel",
+                success_url="https://www.paristoursandtravels.in/success?session_id={CHECKOUT_SESSION_ID}",
+                cancel_url="https://www.paristoursandtravels.in/cancel",
             )
 
             # Cache session ID and metadata in Redis

@@ -26,8 +26,8 @@ class ResortView(APIView):
 
 
 class ResortDetailView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
 
     def get(self, request, pk):
         print("pk", pk)
