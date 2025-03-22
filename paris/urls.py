@@ -17,10 +17,10 @@ def webhook(request):
     if request.method == 'POST':
         try:
             # Validate signature
-            signature = request.headers.get('X-Hub-Signature-256', '').split('sha256=')[-1].strip()
-            body = request.body
-            secret_token = config("SSL_SECRET_TOKEN")
-            expected_signature = hmac.new(secret_token.encode(), body, hashlib.sha256).hexdigest()
+            # signature = request.headers.get('X-Hub-Signature-256', '').split('sha256=')[-1].strip()
+            # body = request.body
+            # secret_token = config("SSL_SECRET_TOKEN")
+            # expected_signature = hmac.new(secret_token.encode(), body, hashlib.sha256).hexdigest()
 
             # if not hmac.compare_digest(signature, expected_signature):
             #     return JsonResponse({'error': f"Inv al ied signature, Received Signature: {signature},Expected  Signature: {expected_signature}"}, status=403)
