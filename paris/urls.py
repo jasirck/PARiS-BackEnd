@@ -29,7 +29,7 @@ def webhook(request):
             repo_dir = config("PROJECT_DIR")
             subprocess.run(['git', '-C', repo_dir, 'pull', 'origin', 'aws-deployment'])
             subprocess.run(['sudo', 'systemctl', 'restart', 'gunicorn'])
-            subprocess.run(['sudo', 'systemctl', 'restart', 'nginx'])
+            subprocess.run(['sudo', 'systemctl', 'restart','nginx'])
 
             return JsonResponse({'status': 'success'})
 
