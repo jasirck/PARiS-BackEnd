@@ -1,6 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import BookedPackage, BookedResort, VisaBooked
+from .models import  VisaBooked
+from packages.models import BookedPackage   
+from resorts.models import BookedResort
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import logging
