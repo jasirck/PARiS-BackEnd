@@ -24,7 +24,9 @@ def webhook(request):
 
             # if not hmac.compare_digest(signature, expected_signature):
             #     return JsonResponse({'error': f"Inv al ied signature, Received Signature: {signature},Expected  Signature: {expected_signature}"}, status=403)
-
+            
+            
+            
             # Execute Git pull and restart services
             repo_dir = config("PROJECT_DIR")
             subprocess.run(['git', '-C', repo_dir, 'pull', 'origin', 'aws-deployment'])
