@@ -20,6 +20,7 @@ def webhook(request):
             # signature = request.headers.get('X-Hub-Signature-256', '').split('sha256=')[-1].strip()
             # body = request.body
             # secret_token = config("SSL_SECRET_TOKEN")
+            
             # expected_signature = hmac.new(secret_token.encode(), body, hashlib.sha256).hexdigest()
 
             # if not hmac.compare_digest(signature, expected_signature):
