@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.group_name = "visa_notifications"
+        self.group_name = "resort_notifications"
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
