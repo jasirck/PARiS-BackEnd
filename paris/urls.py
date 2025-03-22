@@ -23,7 +23,7 @@ def webhook(request):
             expected_signature = hmac.new(secret_token.encode(), body, hashlib.sha256).hexdigest()
 
             if not hmac.compare_digest(signature, expected_signature):
-                return JsonResponse({'error': 'Invalid signature'}, status=403)
+                return JsonResponse({'error':f"Received Signature: {signature}", 'error':f"Expected Signature: {expected_signature}",'error': 'Invalid signature'}, status=403)
 
             # Execute Git pull and restart services
             repo_dir = config("PROJECT_DIR")
