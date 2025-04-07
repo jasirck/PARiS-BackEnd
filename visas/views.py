@@ -81,7 +81,7 @@ class VisaCategoryDetailView(APIView):
 
 
 class VisaListCreateView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         visas = Visa.objects.all().order_by("name")
@@ -89,9 +89,6 @@ class VisaListCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # Log the incoming request to see if data is being passed correctly
-        print("Request data received:", request.data)
-
         visa_data = request.data
         visa_days_data = visa_data.pop("visa_days", [])
 

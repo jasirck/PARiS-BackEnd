@@ -121,7 +121,7 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 SESSION_COOKIE_AGE = 609600
-
+ 
 # Root URL configuration
 ROOT_URLCONF = "paris.urls"
 
