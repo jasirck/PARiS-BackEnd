@@ -81,7 +81,7 @@ class VisaCategoryDetailView(APIView):
 
 
 class VisaListCreateView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         visas = Visa.objects.all().order_by("name")
